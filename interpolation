@@ -1,0 +1,46 @@
+void main() {
+  Map<int, double> fuelMap = Map();
+  List<int> pesos = [67, 2573];
+  List<double> momentos = [86, 4001];
+  List<Tabela> tabela = List();
+  List<Tabela> tabelaFinal = List();
+
+  int x = 0;
+  double y = 0; // y procurado
+  int x1 = 0; // menor valor x conhecido
+  double y1 = 0; // menor valor y conhecido
+  int x2 = 0; // maior valor x conhecido
+  double y2 = 0; // maior valor y conhecido
+
+  for (int i = 0; i < pesos.length; i++) {
+    tabela.add(Tabela(pesos[i], momentos[i]));
+  }
+
+  for (int i = 0; i < tabela.length; i++) {
+    x2 = tabela[i].peso;
+    y2 = tabela[i].momento;
+    for (; x < tabela[i].peso; x++) {
+      // interpola os valores de combustível
+      y = y1 + ((x - x1) / (x2 - x1) * (y2 - y1));
+      tabelaFinal.add(Tabela(x, y));
+      //print('${tabelaFinal[x].peso} = ${tabelaFinal[x].momento}');
+
+    }
+    x = x++;
+    x1 = tabela[i].peso;
+    y1 = tabela[i].momento;
+  }
+  x = tabela.last.peso;
+  y = tabela.last.momento;
+  tabelaFinal.add(Tabela(x, y));
+
+  fuelMap = Map.fromIterable(tabelaFinal,
+      key: (e) => e.peso, value: (e) => e.momento);
+}
+
+class Tabela {
+  int peso;
+  double momento;
+
+  Tabela(this.peso, this.momento);
+}
